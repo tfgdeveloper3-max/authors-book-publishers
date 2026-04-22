@@ -33,7 +33,7 @@ const HeroSection: React.FC = () => {
         <section className="hero">
             <div className="hero-bg">
                 <Image
-                    src="/images/Hero-bg.jpg"
+                    src="/images/hero.jpg"
                     alt="Book covers background"
                     fill
                     priority
