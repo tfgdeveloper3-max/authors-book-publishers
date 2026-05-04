@@ -1,4 +1,7 @@
+'use client';
+
 import Image from "next/image";
+import { useState } from "react";
 
 interface BookCover {
     src: string;
@@ -20,36 +23,84 @@ const books: BookCover[] = [
     { src: "/images/Portfolio/12.webp", alt: "Milford Mouse Private Ear" },
 ];
 
+// Duplicate books for seamless marquee effect
+const duplicatedBooks = [...books, ...books, ...books];
+
 const PortfolioSection: React.FC = () => {
+    const [selectedBook, setSelectedBook] = useState<BookCover | null>(null);
+
     return (
         <section className="port-section">
             <h2 className="port-heading">Our Portfolio</h2>
 
-            <div className="port-grid">
-                {books.map((book) => (
-                    <div key={book.alt} className="port-item">
+            <div className="port-marquee-container">
+                <div className="port-marquee">
+                    {duplicatedBooks.map((book, index) => (
+                        <div
+                            key={`${book.alt}-${index}`}
+                            className="port-item"
+                            onMouseEnter={() => setSelectedBook(book)}
+                        >
+                            <Image
+                                src={book.src}
+                                alt={book.alt}
+                                width={200}
+                                height={280}
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                    display: "block",
+                                }}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Modal Overlay */}
+            {selectedBook && (
+                <div
+                    className="modal-overlay"
+                    onClick={() => setSelectedBook(null)}
+                >
+                    <div
+                        className="modal-image-wrapper"
+                        onMouseLeave={() => setSelectedBook(null)}
+                    >
                         <Image
-                            src={book.src}
-                            alt={book.alt}
-                            width={200}
-                            height={280}
+                            src={selectedBook.src}
+                            alt={selectedBook.alt}
+                            width={400}
+                            height={560}
+                            priority
                             style={{
                                 width: "100%",
                                 height: "100%",
-                                objectFit: "cover",
-                                display: "block",
+                                objectFit: "contain",
                             }}
                         />
                     </div>
-                ))}
-            </div>
+                </div>
+            )}
 
             <style jsx>{`
+                @keyframes marquee {
+                    0% {
+                        transform: translateX(0);
+                    }
+                    100% {
+                        transform: translateX(-33.333%);
+                    }
+                }
+
                 .port-section {
                     background: #fff;
                     font-family: "Nunito Sans", sans-serif;
                     padding: 70px 60px;
+                    position: relative;
                 }
+
                 .port-heading {
                     text-align: center;
                     font-size: clamp(22px, 2.2vw, 32px);
@@ -57,30 +108,111 @@ const PortfolioSection: React.FC = () => {
                     color: #111;
                     margin-bottom: 40px;
                 }
-                .port-grid {
-                    display: grid;
-                    grid-template-columns: repeat(6, 1fr);
-                    gap: 10px;
-                    max-width: 1200px;
-                    margin: 0 auto;
+
+                .port-marquee-container {
+                    overflow: hidden;
+                    width: 100%;
+                    background: #fff;
                 }
+
+                .port-marquee {
+                    display: flex;
+                    gap: 10px;
+                    animation: marquee 40s linear infinite;
+                    width: fit-content;
+                    will-change: transform;
+                }
+
                 .port-item {
                     border-radius: 6px;
                     overflow: hidden;
                     aspect-ratio: 2/3;
+                    width: 250px;
+                    flex-shrink: 0;
                     cursor: pointer;
-                    transition: transform 0.25s, box-shadow 0.25s;
+                    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+                    transform-origin: center;
                 }
+
                 .port-item:hover {
-                    transform: translateY(-5px) scale(1.03);
-                    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+                    transform: translateY(-5px) scale(1.08);
+                    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
                 }
-                @media (max-width: 1024px) {
-                    .port-grid { grid-template-columns: repeat(4, 1fr); }
+
+                /* Modal Overlay */
+                .modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.6);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                    animation: fadeIn 0.3s ease-in-out;
+                    backdrop-filter: blur(3px);
                 }
+
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                    }
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes zoomIn {
+                    from {
+                        transform: scale(0.8);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                }
+
+                .modal-image-wrapper {
+                    width: 400px;
+                    height: auto;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    animation: zoomIn 0.4s ease-out;
+                    cursor: pointer;
+                    will-change: transform;
+                }
+
+                @keyframes zoomOut {
+                    from {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: scale(0.8);
+                        opacity: 0;
+                    }
+                }
+
+                .modal-image-wrapper:not(:hover) {
+                    animation: zoomOut 0.4s ease-out forwards;
+                }
+
                 @media (max-width: 640px) {
-                    .port-section { padding: 50px 20px; }
-                    .port-grid { grid-template-columns: repeat(3, 1fr); }
+                    .port-section { 
+                        padding: 50px 20px; 
+                    }
+                    .port-marquee-container {
+                        width: calc(100vw - 40px);
+                    }
+                    .port-item {
+                        width: 120px;
+                    }
+                    .modal-content {
+                        padding: 20px;
+                    }
                 }
             `}</style>
         </section>

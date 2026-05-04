@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
 
 interface ProcedureCard {
     icon: string;
@@ -12,7 +11,7 @@ interface ProcedureCard {
 const cards: ProcedureCard[] = [
     {
         icon: "/images/icons/Formatting.png",
-        title: "Formating",
+        title: "Formatting",
         description:
             "The formatting of your book is important as different publishing platforms have their respective policies and they don't accept files that do not match their formatting requirements.",
     },
@@ -24,7 +23,7 @@ const cards: ProcedureCard[] = [
     },
     {
         icon: "/images/icons/Editing.png",
-        title: "Editing/Proofreading",
+        title: "Editing / Proofreading",
         description:
             "The editing phase is an obligatory step to follow even if you are a writer yourself, our editing and proofreading services are exactly designed to cater to you through all the complexities of your publishing journey.",
     },
@@ -43,144 +42,211 @@ const cards: ProcedureCard[] = [
 ];
 
 const ProcedureSection: React.FC = () => {
-    useEffect(() => {
-        if (!document.querySelector("#swiper-css")) {
-            const link = document.createElement("link");
-            link.id = "swiper-css";
-            link.rel = "stylesheet";
-            link.href = "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css";
-            document.head.appendChild(link);
-        }
-
-        const initSwiper = (): void => {
-            new (window as any).Swiper(".procedure-swiper", {
-                slidesPerView: 3,
-                centeredSlides: true,
-                spaceBetween: 24,
-                loop: true,
-                speed: 700,
-                autoplay: {
-                    delay: 2500,
-                    disableOnInteraction: false,
-                },
-                breakpoints: {
-                    0: { slidesPerView: 1 },
-                    640: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                },
-            });
-        };
-
-        if (!(window as any).Swiper) {
-            const script = document.createElement("script");
-            script.src = "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js";
-            script.onload = initSwiper;
-            document.body.appendChild(script);
-        } else {
-            initSwiper();
-        }
-    }, []);
-
     return (
         <>
+            {/*
+             * FIX: styled-jsx does not allow two <style jsx> tags in the same component.
+             * Solution: merge everything into ONE <style jsx global> block.
+             * global is needed for .proc-track (used inside JSX map, outside scoped reach).
+             */}
             <style jsx global>{`
-                .procedure-swiper {
+                @keyframes proc-slide {
+                    0%   { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                }
+                @keyframes proc-blink {
+                    0%, 100% { opacity: 1; }
+                    50%      { opacity: 0.2; }
+                }
+
+                .proc-track {
+                    display: flex;
+                    gap: 24px;
+                    width: max-content;
+                    animation: proc-slide 22s linear infinite;
+                }
+                .proc-track:hover {
+                    animation-play-state: paused;
+                }
+
+                .proc-section {
+                    background: #161616;
+                    font-family: Raleway, Arial, sans-serif;
+                    padding: 64px 0 52px;
+                    overflow: hidden;
+                    position: relative;
                     width: 100%;
-                    overflow: visible !important;
-                    padding: 30px 0 50px !important;
                 }
-                .procedure-swiper .swiper-slide-active .proc-card {
+                .proc-grid {
+                    position: absolute; inset: 0;
+                    background-image:
+                        linear-gradient(rgba(245, 124, 21, 0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(245, 124, 21, 0.04) 1px, transparent 1px);
+                    background-size: 48px 48px;
+                    pointer-events: none;
+                    z-index: 0;
+                }
+                .proc-glow-c {
+                    position: absolute;
+                    top: -80px; left: 50%;
+                    transform: translateX(-50%);
+                    width: 520px; height: 320px;
+                    border-radius: 50%;
+                    background: radial-gradient(
+                        ellipse, rgba(245, 124, 21, 0.14) 0%, transparent 70%
+                    );
+                    pointer-events: none;
+                    z-index: 0;
+                }
+                .proc-head {
+                    text-align: center;
+                    position: relative; z-index: 2;
+                    padding: 0 20px;
+                    margin-bottom: 8px;
+                }
+                .proc-badge {
+                    display: inline-flex; align-items: center; gap: 8px;
+                    background: rgba(245, 124, 21, 0.10);
+                    border: 1px solid rgba(245, 124, 21, 0.22);
+                    color: #f57c15; font-size: 11px; font-weight: 700;
+                    letter-spacing: 1px; text-transform: uppercase;
+                    padding: 5px 14px; border-radius: 20px; margin-bottom: 14px;
+                }
+                .proc-badge-dot {
+                    width: 6px; height: 6px; border-radius: 50%;
+                    background: #f57c15; flex-shrink: 0;
+                    animation: proc-blink 1.5s ease-in-out infinite;
+                }
+                .proc-heading {
+                    font-size: clamp(1.5rem, 3vw, 2.8rem);
+                    font-weight: 700; color: #fff; line-height: 1.35;
+                }
+                .proc-hl { color: #f57c15; }
+
+                .proc-track-wrap {
+                    position: relative; z-index: 2;
+                    overflow: hidden;
+                    padding: 40px 0 50px;
+                    mask-image: linear-gradient(
+                        90deg, transparent 0%, black 10%, black 90%, transparent 100%
+                    );
+                    -webkit-mask-image: linear-gradient(
+                        90deg, transparent 0%, black 10%, black 90%, transparent 100%
+                    );
+                }
+                .proc-card {
+                    flex-shrink: 0;
+                    width: 300px;
+                    background: rgba(255, 255, 255, 0.04);
+                    backdrop-filter: blur(14px);
+                    -webkit-backdrop-filter: blur(14px);
+                    border: 1px solid rgba(245, 124, 21, 0.18);
+                    border-radius: 28px;
+                    padding: 38px 26px 32px;
+                    display: flex; flex-direction: column; align-items: center;
+                    text-align: center;
+                    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+                    position: relative; overflow: hidden;
+                    cursor: default;
+                }
+                .proc-card::before {
+                    content: '';
+                    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+                    background: linear-gradient(90deg, transparent, #f57c15, transparent);
+                    opacity: 0; transition: opacity 0.3s;
+                }
+                .proc-card:hover {
+                    transform: translateY(-8px) scale(1.03);
+                    box-shadow: 0 16px 48px rgba(245, 124, 21, 0.18),
+                                0 0 0 1px rgba(245, 124, 21, 0.28);
+                    border-color: rgba(245, 124, 21, 0.38);
+                }
+                .proc-card:hover::before { opacity: 1; }
+                .proc-icon-wrap {
+                    width: 70px; height: 70px; border-radius: 18px;
+                    background: rgba(245, 124, 21, 0.10);
+                    border: 1px solid rgba(245, 124, 21, 0.24);
+                    display: flex; align-items: center; justify-content: center;
+                    margin-bottom: 20px;
+                    box-shadow: 0 0 24px rgba(245, 124, 21, 0.16);
+                    transition: box-shadow 0.3s, transform 0.3s;
+                }
+                .proc-card:hover .proc-icon-wrap {
+                    box-shadow: 0 0 36px rgba(245, 124, 21, 0.34);
                     transform: scale(1.08);
-                    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
-                    z-index: 2;
                 }
-                .procedure-swiper .swiper-slide:not(.swiper-slide-active) .proc-card {
-                    transform: scale(0.93);
-                    opacity: 0.85;
+                .proc-card-title {
+                    font-size: 17px; font-weight: 700;
+                    color: #fff; margin-bottom: 12px; line-height: 1.3;
+                }
+                .proc-card-desc {
+                    font-size: 13px;
+                    color: rgba(255, 255, 255, 0.50);
+                    line-height: 1.8;
                 }
             `}</style>
 
             <section className="proc-section">
-                <h2 className="proc-heading">
-                    Our Simplest Procedure To Serve Your Author Needs!
-                </h2>
+                <div className="proc-grid" />
+                <div className="proc-glow-c" />
 
-                <div className="swiper procedure-swiper">
-                    <div className="swiper-wrapper">
+                <div className="proc-head">
+                    <div className="proc-badge">
+                        <span className="proc-badge-dot" />
+                        How We Work
+                    </div>
+                    <h2 className="proc-heading">
+                        Our Simplest Procedure To Serve Your{" "}
+                        <span className="proc-hl">Author Needs!</span>
+                    </h2>
+                </div>
+
+                <div className="proc-track-wrap">
+                    <div className="proc-track">
                         {cards.map((card) => (
-                            <div className="swiper-slide" key={card.title}>
-                                <div className="proc-card">
-                                    <div className="proc-icon">
-                                        <Image
-                                            src={card.icon}
-                                            alt={card.title}
-                                            width={72}
-                                            height={72}
-                                            style={{
-                                                width: "72px",
-                                                height: "72px",
-                                                objectFit: "contain",
-                                                filter: "brightness(0) invert(1)",
-                                            }}
-                                        />
-                                    </div>
-                                    <h3 className="proc-card-title">{card.title}</h3>
-                                    <p className="proc-card-desc">{card.description}</p>
+                            <div className="proc-card" key={`a-${card.title}`}>
+                                <div className="proc-icon-wrap">
+                                    <Image
+                                        src={card.icon}
+                                        alt={card.title}
+                                        width={36}
+                                        height={36}
+                                        style={{
+                                            width: "36px",
+                                            height: "36px",
+                                            objectFit: "contain",
+                                            filter: "brightness(0) saturate(100%) invert(55%) sepia(80%) saturate(600%) hue-rotate(360deg)",
+                                        }}
+                                    />
                                 </div>
+                                <h3 className="proc-card-title">{card.title}</h3>
+                                <p className="proc-card-desc">{card.description}</p>
+                            </div>
+                        ))}
+                        {/* Duplicate for seamless infinite loop */}
+                        {cards.map((card) => (
+                            <div className="proc-card" key={`b-${card.title}`}>
+                                <div className="proc-icon-wrap">
+                                    <Image
+                                        src={card.icon}
+                                        alt={card.title}
+                                        width={36}
+                                        height={36}
+                                        style={{
+                                            width: "36px",
+                                            height: "36px",
+                                            objectFit: "contain",
+                                            filter: "brightness(0) saturate(100%) invert(55%) sepia(80%) saturate(600%) hue-rotate(360deg)",
+                                        }}
+                                    />
+                                </div>
+                                <h3 className="proc-card-title">{card.title}</h3>
+                                <p className="proc-card-desc">{card.description}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
-
-            <style jsx>{`
-                .proc-section {
-                    background: #fff;
-                    font-family: "Nunito Sans", sans-serif;
-                    padding: 60px 0 30px;
-                    overflow: hidden;
-                    width: 100%;
-                }
-
-                .proc-heading {
-                    text-align: center;
-                    font-size: clamp(18px, 2vw, 26px);
-                    font-weight: 700;
-                    color: #111;
-                    margin-bottom: 10px;
-                    padding: 0 20px;
-                }
-
-                .proc-card {
-                    background: #f57c15;
-                    padding: 50px;
-                    border-radius: 50px;
-                    text-align: center;
-                    min-height: 390px;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    color: #fff;
-                    transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
-                }
-
-                .proc-icon {
-                    margin-bottom: 20px;
-                }
-
-                .proc-card-title {
-                    font-size: 22px;
-                    font-weight: 700;
-                    color: #fff;
-                    margin-bottom: 14px;
-                }
-
-                .proc-card-desc {
-                    font-size: 17.5px;
-                    color: rgba(255, 255, 255, 0.92);
-                    line-height: 1.75;
-                }
-            `}</style>
         </>
     );
 };

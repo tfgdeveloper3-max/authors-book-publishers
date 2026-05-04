@@ -32,7 +32,15 @@ const marketingServices: string[] = [
 const FooterSection: React.FC = () => {
     return (
         <footer className="footer">
+            {/* Background layers */}
+            <div className="footer-grid" />
+            <div className="footer-glow footer-glow-tl" />
+            <div className="footer-glow footer-glow-br" />
+
+            {/* Main columns */}
             <div className="footer-inner">
+
+                {/* Brand + contact */}
                 <div className="footer-brand">
                     <div className="footer-logo">
                         <Image
@@ -43,13 +51,24 @@ const FooterSection: React.FC = () => {
                             style={{ height: "44px", width: "auto" }}
                         />
                     </div>
+
                     <div className="footer-contact">
-                        <p>info@authorsbookpublishing.com</p>
-                        <p>(646) 298 6438</p>
-                        <p>140 Broadway, 46th floor, New York,<br />NY, 10005</p>
+                        <div className="contact-item">
+                            <span className="contact-icon">✉</span>
+                            <span>info@authorsbookpublishing.com</span>
+                        </div>
+                        <div className="contact-item">
+                            <span className="contact-icon">📞</span>
+                            <span>(646) 298 6438</span>
+                        </div>
+                        <div className="contact-item">
+                            <span className="contact-icon">📍</span>
+                            <span>140 Broadway, 46th floor, New York,<br />NY, 10005</span>
+                        </div>
                     </div>
                 </div>
 
+                {/* Publishing services */}
                 <div className="footer-col">
                     <h4 className="footer-col-title">Publishing Services</h4>
                     <ul>
@@ -62,6 +81,7 @@ const FooterSection: React.FC = () => {
                     </ul>
                 </div>
 
+                {/* Writing services */}
                 <div className="footer-col">
                     <h4 className="footer-col-title">Writing Services</h4>
                     <ul>
@@ -74,8 +94,9 @@ const FooterSection: React.FC = () => {
                     </ul>
                 </div>
 
+                {/* Marketing */}
                 <div className="footer-col">
-                    <h4 className="footer-col-title">Marketing & Audio</h4>
+                    <h4 className="footer-col-title">Marketing &amp; Audio</h4>
                     <ul>
                         {marketingServices.map((s) => (
                             <li key={s}>
@@ -87,6 +108,7 @@ const FooterSection: React.FC = () => {
                 </div>
             </div>
 
+            {/* Bottom bar */}
             <div className="footer-bottom">
                 <p className="footer-copy">
                     Copyright © Authors Book Publishing<br />
@@ -95,26 +117,26 @@ const FooterSection: React.FC = () => {
 
                 <div className="footer-social">
                     <Link href="#" className="social-icon" aria-label="Facebook">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                             <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                         </svg>
                     </Link>
                     <Link href="#" className="social-icon" aria-label="Instagram">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                             <circle cx="12" cy="12" r="4" />
                             <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
                         </svg>
                     </Link>
                     <Link href="#" className="social-icon" aria-label="LinkedIn">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                             <rect x="2" y="9" width="4" height="12" />
                             <circle cx="4" cy="4" r="2" />
                         </svg>
                     </Link>
                     <Link href="#" className="social-icon" aria-label="X / Twitter">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                         </svg>
                     </Link>
@@ -122,53 +144,117 @@ const FooterSection: React.FC = () => {
 
                 <div className="footer-links">
                     <Link href="#">Terms &amp; Conditions</Link>
+                    <span className="links-divider" />
                     <Link href="#">Privacy &amp; Policy</Link>
                 </div>
             </div>
 
             <style jsx>{`
                 .footer {
-                    background: #1a1a1a;
-                    font-family: "Nunito Sans", sans-serif;
+                    background: #111;
+                    font-family: Raleway, Arial, sans-serif;
                     padding: 60px 60px 0;
+                    position: relative;
+                    overflow: hidden;
                 }
+
+                /* Grid */
+                .footer-grid {
+                    position: absolute; inset: 0;
+                    background-image:
+                        linear-gradient(rgba(245, 124, 21, 0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(245, 124, 21, 0.03) 1px, transparent 1px);
+                    background-size: 48px 48px;
+                    pointer-events: none; z-index: 0;
+                }
+
+                /* Ambient glows */
+                .footer-glow {
+                    position: absolute; border-radius: 50%;
+                    pointer-events: none; z-index: 0;
+                }
+                .footer-glow-tl {
+                    top: -80px; left: -60px;
+                    width: 380px; height: 380px;
+                    background: radial-gradient(circle, rgba(245, 124, 21, 0.10) 0%, transparent 65%);
+                }
+                .footer-glow-br {
+                    bottom: -60px; right: -40px;
+                    width: 300px; height: 300px;
+                    background: radial-gradient(circle, rgba(245, 124, 21, 0.07) 0%, transparent 65%);
+                }
+
+                /* Inner columns */
                 .footer-inner {
+                    position: relative; z-index: 2;
                     display: flex;
                     gap: 40px;
                     max-width: 1300px;
                     margin: 0 auto;
                     padding-bottom: 50px;
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                    border-bottom: 1px solid rgba(245, 124, 21, 0.12);
                     flex-wrap: wrap;
                 }
+
+                /* Brand column */
                 .footer-brand {
                     width: 220px;
                     flex-shrink: 0;
                     display: flex;
                     flex-direction: column;
-                    gap: 20px;
+                    gap: 22px;
                 }
-                .footer-contact p {
-                    font-size: 13px;
-                    color: rgba(255, 255, 255, 0.7);
-                    line-height: 1.7;
-                    margin: 0 0 4px;
+
+                /* Contact items with icon boxes */
+                .footer-contact {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
                 }
+                .contact-item {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 10px;
+                    font-size: 12.5px;
+                    color: rgba(255, 255, 255, 0.58);
+                    line-height: 1.65;
+                }
+                .contact-icon {
+                    width: 28px; height: 28px;
+                    border-radius: 7px; flex-shrink: 0;
+                    background: rgba(245, 124, 21, 0.10);
+                    border: 1px solid rgba(245, 124, 21, 0.20);
+                    display: flex; align-items: center; justify-content: center;
+                    font-size: 12px; color: #f57c15;
+                    margin-top: 1px;
+                }
+
+                /* Service columns */
                 .footer-col {
                     flex: 1;
                     min-width: 160px;
                 }
                 .footer-col-title {
-                    font-size: 15px;
+                    font-size: 14px;
                     font-weight: 700;
                     color: #fff;
                     margin-bottom: 18px;
                     letter-spacing: 0.3px;
+                    position: relative;
+                    padding-bottom: 10px;
+                }
+                /* Orange underline accent on column titles */
+                .footer-col-title::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0; left: 0;
+                    width: 28px; height: 2px;
+                    background: linear-gradient(90deg, #f57c15, #ffb347);
+                    border-radius: 2px;
                 }
                 .footer-col ul {
                     list-style: none;
-                    margin: 0;
-                    padding: 0;
+                    margin: 0; padding: 0;
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
@@ -180,22 +266,26 @@ const FooterSection: React.FC = () => {
                 }
                 .footer-arrow {
                     color: #f57c15;
-                    font-size: 9px;
+                    font-size: 8px;
                     flex-shrink: 0;
                 }
                 .footer-col :global(a) {
                     font-size: 13px;
-                    color: rgba(255, 255, 255, 0.7);
+                    color: rgba(255, 255, 255, 0.58);
                     text-decoration: none;
                     transition: color 0.2s;
+                    letter-spacing: 0.2px;
                 }
                 .footer-col :global(a:hover) {
                     color: #f57c15;
                 }
+
+                /* Bottom bar */
                 .footer-bottom {
+                    position: relative; z-index: 2;
                     max-width: 1300px;
                     margin: 0 auto;
-                    padding: 24px 0;
+                    padding: 22px 0;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
@@ -203,45 +293,58 @@ const FooterSection: React.FC = () => {
                     gap: 16px;
                 }
                 .footer-copy {
-                    font-size: 12.5px;
-                    color: rgba(255, 255, 255, 0.55);
+                    font-size: 12px;
+                    color: rgba(255, 255, 255, 0.38);
                     line-height: 1.6;
                     margin: 0;
                 }
+
+                /* Social icons */
                 .footer-social {
                     display: flex;
-                    gap: 10px;
+                    gap: 8px;
                 }
                 .footer-social :global(.social-icon) {
-                    width: 38px;
-                    height: 38px;
+                    width: 36px; height: 36px;
                     border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.08);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #f5c518;
+                    background: rgba(255, 255, 255, 0.06);
+                    border: 1px solid rgba(245, 124, 21, 0.18);
+                    display: flex; align-items: center; justify-content: center;
+                    color: rgba(255, 255, 255, 0.60);
                     text-decoration: none;
-                    transition: background 0.2s, color 0.2s, transform 0.2s;
+                    transition: background 0.2s, color 0.2s,
+                                box-shadow 0.2s, transform 0.2s, border-color 0.2s;
                 }
                 .footer-social :global(.social-icon:hover) {
-                    background: #f5c518;
-                    color: #111;
+                    background: #f57c15;
+                    color: #fff;
+                    border-color: transparent;
+                    box-shadow: 0 4px 18px rgba(245, 124, 21, 0.42);
                     transform: translateY(-3px);
                 }
+
+                /* Policy links */
                 .footer-links {
                     display: flex;
-                    gap: 20px;
+                    align-items: center;
+                    gap: 14px;
                 }
                 .footer-links :global(a) {
-                    font-size: 13px;
-                    color: rgba(255, 255, 255, 0.6);
+                    font-size: 12.5px;
+                    color: rgba(255, 255, 255, 0.45);
                     text-decoration: none;
                     transition: color 0.2s;
                 }
                 .footer-links :global(a:hover) {
                     color: #f57c15;
                 }
+                .links-divider {
+                    width: 1px; height: 14px;
+                    background: rgba(255, 255, 255, 0.14);
+                    display: inline-block;
+                    flex-shrink: 0;
+                }
+
                 @media (max-width: 768px) {
                     .footer { padding: 50px 20px 0; }
                     .footer-brand { width: 100%; }
