@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const serviceLinks = [
     { href: "/services/ghostwriting", label: "Ghostwriting" },
@@ -15,10 +15,20 @@ const serviceLinks = [
 const Navbar: React.FC = () => {
     const [servicesOpen, setServicesOpen] = useState<boolean>(false);
     const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+    const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    /* ── Dropdown: delayed close so gap between trigger & menu doesn't close it ── */
+    const handleMouseEnter = () => {
+        if (closeTimer.current) clearTimeout(closeTimer.current);
+        setServicesOpen(true);
+    };
+
+    const handleMouseLeave = () => {
+        closeTimer.current = setTimeout(() => setServicesOpen(false), 120);
+    };
 
     return (
         <nav className="navbar">
-            {/* Orange glow line at bottom of navbar */}
             <div className="nav-glow-line" />
 
             <div className="nav-inner">
@@ -37,24 +47,37 @@ const Navbar: React.FC = () => {
                     <li><Link href="/about">ABOUT</Link></li>
                     <li><Link href="/portfolio">PORTFOLIO</Link></li>
                     <li><Link href="/testimonials">TESTIMONIALS</Link></li>
+
+                    {/* ── Services dropdown ── */}
                     <li
                         className="nav-dropdown"
-                        onMouseEnter={() => setServicesOpen(true)}
-                        onMouseLeave={() => setServicesOpen(false)}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                     >
-                        <span className="nav-services-trigger">
+                        {/* Clicking "SERVICES" goes to /services page */}
+                        <Link href="/services" className="nav-services-trigger">
                             SERVICES <span className="caret">&#9660;</span>
-                        </span>
-                        <ul className={`dropdown-menu${servicesOpen ? " open" : ""}`}>
+                        </Link>
+
+                        {/* Dropdown stays open as long as mouse is over trigger OR menu */}
+                        <ul
+                            className={`dropdown-menu${servicesOpen ? " open" : ""}`}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                        >
                             {serviceLinks.map((s) => (
                                 <li key={s.href}>
-                                    <Link href={s.href} onClick={() => setServicesOpen(false)}>
+                                    <Link
+                                        href={s.href}
+                                        onClick={() => setServicesOpen(false)}
+                                    >
                                         {s.label}
                                     </Link>
                                 </li>
                             ))}
                         </ul>
                     </li>
+
                     <li className="nav-cta-li">
                         <Link href="/contact" className="nav-cta-link">CONTACT US</Link>
                     </li>
@@ -65,9 +88,9 @@ const Navbar: React.FC = () => {
                     onClick={() => setMobileOpen(!mobileOpen)}
                     aria-label="Toggle menu"
                 >
-                    <span className={mobileOpen ? "bar open-1" : "bar"} />
-                    <span className={mobileOpen ? "bar open-2" : "bar"} />
-                    <span className={mobileOpen ? "bar open-3" : "bar"} />
+                    <span className="bar" />
+                    <span className="bar" />
+                    <span className="bar" />
                 </button>
             </div>
 
@@ -78,6 +101,13 @@ const Navbar: React.FC = () => {
                     <li><Link href="/portfolio" onClick={() => setMobileOpen(false)}>PORTFOLIO</Link></li>
                     <li><Link href="/testimonials" onClick={() => setMobileOpen(false)}>TESTIMONIALS</Link></li>
                     <li><Link href="/services" onClick={() => setMobileOpen(false)}>SERVICES</Link></li>
+                    {serviceLinks.map((s) => (
+                        <li key={s.href} className="mobile-sub">
+                            <Link href={s.href} onClick={() => setMobileOpen(false)}>
+                                {s.label}
+                            </Link>
+                        </li>
+                    ))}
                     <li><Link href="/contact" onClick={() => setMobileOpen(false)}>CONTACT US</Link></li>
                 </ul>
             )}
@@ -98,7 +128,6 @@ const Navbar: React.FC = () => {
                     font-family: Raleway, Arial, sans-serif;
                 }
 
-                /* Subtle orange gradient line at navbar bottom */
                 .nav-glow-line {
                     position: absolute;
                     bottom: -1px; left: 50%;
@@ -130,19 +159,16 @@ const Navbar: React.FC = () => {
                     flex-shrink: 0;
                 }
 
-                /* Desktop nav links */
                 .nav-links {
                     display: flex;
                     align-items: center;
                     gap: 4px;
                     list-style: none;
                     margin: 0;
-                    padding: 0;
-                    padding-right: 20px;
+                    padding: 0 20px 0 0;
                 }
-                .nav-links li {
-                    position: relative;
-                }
+                .nav-links li { position: relative; }
+
                 .nav-links :global(a) {
                     color: rgba(255, 255, 255, 0.75) !important;
                     font-size: 12px;
@@ -154,43 +180,45 @@ const Navbar: React.FC = () => {
                     transition: color 0.2s, background 0.2s;
                     font-family: Raleway, Arial, sans-serif;
                     white-space: nowrap;
-                    display: block;
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
                 }
                 .nav-links :global(a:hover) {
                     color: #f57c15 !important;
                     background: rgba(245, 124, 21, 0.08);
                 }
 
-                /* Services trigger */
-                .nav-services-trigger {
-                    color: rgba(255, 255, 255, 0.75);
-                    font-size: 12px;
-                    font-weight: 700;
-                    letter-spacing: 0.7px;
-                    cursor: pointer;
-                    transition: color 0.2s, background 0.2s;
-                    font-family: Raleway, Arial, sans-serif;
-                    white-space: nowrap;
-                    display: flex;
-                    align-items: center;
-                    gap: 5px;
-                    user-select: none;
-                    padding: 8px 12px;
-                    border-radius: 6px;
+                /* Services trigger — now a real Link */
+                :global(.nav-services-trigger) {
+                    color: rgba(255, 255, 255, 0.75) !important;
+                    font-size: 12px !important;
+                    font-weight: 700 !important;
+                    letter-spacing: 0.7px !important;
+                    padding: 8px 12px !important;
+                    border-radius: 6px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 5px !important;
+                    white-space: nowrap !important;
+                    text-decoration: none !important;
+                    transition: color 0.2s, background 0.2s !important;
+                    font-family: Raleway, Arial, sans-serif !important;
                 }
-                .nav-services-trigger:hover {
-                    color: #f57c15;
-                    background: rgba(245, 124, 21, 0.08);
+                :global(.nav-services-trigger:hover) {
+                    color: #f57c15 !important;
+                    background: rgba(245, 124, 21, 0.08) !important;
                 }
+
                 .caret {
                     font-size: 7px;
-                    margin-top: 1px;
-                    transition: transform 0.2s;
                     opacity: 0.7;
+                    transition: transform 0.2s;
                 }
+
                 .nav-dropdown { position: relative; cursor: pointer; }
 
-                /* CTA button */
+                /* CTA */
                 .nav-cta-li :global(.nav-cta-link) {
                     background: #f57c15 !important;
                     color: #fff !important;
@@ -198,26 +226,26 @@ const Navbar: React.FC = () => {
                     padding: 9px 20px !important;
                     box-shadow: 0 4px 16px rgba(245, 124, 21, 0.35);
                     transition: background 0.2s, box-shadow 0.2s !important;
-                    letter-spacing: 0.7px;
+                    letter-spacing: 0.7px !important;
                 }
                 .nav-cta-li :global(.nav-cta-link:hover) {
                     background: #d96a0a !important;
                     box-shadow: 0 6px 24px rgba(245, 124, 21, 0.52) !important;
                 }
 
-                /* Dropdown */
+                /* ── Dropdown menu ── */
                 .dropdown-menu {
                     position: absolute;
-                    top: calc(100% + 14px);
+                    top: calc(100% + 8px);
                     left: 50%;
-                    transform: translateX(-50%);
+                    transform: translateX(-50%) translateY(-6px);
                     background: rgba(18, 18, 18, 0.97);
                     backdrop-filter: blur(16px);
                     -webkit-backdrop-filter: blur(16px);
                     border: 1px solid rgba(245, 124, 21, 0.18);
                     border-radius: 10px;
                     list-style: none;
-                    min-width: 185px;
+                    min-width: 190px;
                     padding: 6px;
                     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55),
                                 0 0 24px rgba(245, 124, 21, 0.06);
@@ -226,9 +254,7 @@ const Navbar: React.FC = () => {
                     pointer-events: none;
                     opacity: 0;
                     visibility: hidden;
-                    transition: opacity 0.2s ease, visibility 0.2s ease,
-                                transform 0.2s ease;
-                    transform: translateX(-50%) translateY(-4px);
+                    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
                 }
                 .dropdown-menu.open {
                     opacity: 1;
@@ -236,6 +262,16 @@ const Navbar: React.FC = () => {
                     pointer-events: all;
                     transform: translateX(-50%) translateY(0);
                 }
+
+                /* Bridge gap so mouse moving from trigger to menu doesn't close it */
+                .dropdown-menu::before {
+                    content: '';
+                    position: absolute;
+                    top: -10px;
+                    left: 0; right: 0;
+                    height: 10px;
+                }
+
                 .dropdown-menu li :global(a) {
                     display: block !important;
                     padding: 9px 14px !important;
@@ -246,6 +282,8 @@ const Navbar: React.FC = () => {
                     letter-spacing: 0.3px;
                     background: transparent !important;
                     transition: background 0.15s, color 0.15s !important;
+                    white-space: nowrap;
+                    justify-content: flex-start !important;
                 }
                 .dropdown-menu li :global(a:hover) {
                     background: rgba(245, 124, 21, 0.12) !important;
@@ -267,8 +305,7 @@ const Navbar: React.FC = () => {
                 .hamburger:hover { border-color: rgba(245, 124, 21, 0.4); }
                 .bar {
                     display: block;
-                    width: 20px;
-                    height: 2px;
+                    width: 20px; height: 2px;
                     background: rgba(255, 255, 255, 0.75);
                     border-radius: 2px;
                     transition: background 0.2s;
@@ -299,6 +336,18 @@ const Navbar: React.FC = () => {
                     color: #f57c15 !important;
                     background: rgba(245, 124, 21, 0.07);
                     border-left-color: #f57c15;
+                }
+                /* Sub-links indented on mobile */
+                .mobile-sub :global(a) {
+                    padding-left: 40px !important;
+                    font-size: 11px !important;
+                    color: rgba(255, 255, 255, 0.50) !important;
+                    font-weight: 600 !important;
+                    border-left-color: transparent !important;
+                }
+                .mobile-sub :global(a:hover) {
+                    color: #f57c15 !important;
+                    border-left-color: #f57c15 !important;
                 }
 
                 @media (max-width: 768px) {

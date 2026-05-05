@@ -407,7 +407,7 @@ const BookReachSection: React.FC = () => {
                     border: 1px solid rgba(255, 255, 255, 0.16);
                     padding: 13px 32px; border-radius: 6px;
                     font-size: 14px; font-weight: 700; cursor: pointer;
-                    font-family: "Nunito Sans", sans-serif;
+                    font-family: Raleway, Arial, sans-serif;
                     transition: background 0.2s, box-shadow 0.2s;
                     backdrop-filter: blur(8px);
                 }
@@ -416,7 +416,7 @@ const BookReachSection: React.FC = () => {
                     background: #f57c15; color: #fff; border: none;
                     padding: 13px 32px; border-radius: 6px;
                     font-size: 14px; font-weight: 700; cursor: pointer;
-                    font-family: "Nunito Sans", sans-serif;
+                    font-family: Raleway, Arial, sans-serif;
                     transition: background 0.2s, box-shadow 0.2s;
                     box-shadow: 0 4px 22px rgba(245, 124, 21, 0.40);
                 }

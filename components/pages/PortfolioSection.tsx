@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface BookCover {
     src: string;
@@ -23,196 +23,233 @@ const books: BookCover[] = [
     { src: "/images/Portfolio/12.webp", alt: "Milford Mouse Private Ear" },
 ];
 
-// Duplicate books for seamless marquee effect
-const duplicatedBooks = [...books, ...books, ...books];
+// Triple for seamless loop
+const track = [...books, ...books, ...books];
 
 const PortfolioSection: React.FC = () => {
-    const [selectedBook, setSelectedBook] = useState<BookCover | null>(null);
+    const [selected, setSelected] = useState<BookCover | null>(null);
+    const [visible, setVisible] = useState(false);
+
+    /* Open modal */
+    const openModal = (book: BookCover) => {
+        setSelected(book);
+        // tiny delay so CSS transition fires properly
+        requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+    };
+
+    /* Close modal */
+    const closeModal = () => {
+        setVisible(false);
+        // wait for fade-out then unmount
+        setTimeout(() => setSelected(null), 280);
+    };
+
+    /* Close on Escape key */
+    useEffect(() => {
+        if (!selected) return;
+        const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeModal(); };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [selected]);
+
+    /* Lock body scroll when modal is open */
+    useEffect(() => {
+        document.body.style.overflow = selected ? "hidden" : "";
+        return () => { document.body.style.overflow = ""; };
+    }, [selected]);
 
     return (
         <section className="port-section">
             <h2 className="port-heading">Our Portfolio</h2>
 
-            <div className="port-marquee-container">
-                <div className="port-marquee">
-                    {duplicatedBooks.map((book, index) => (
+            {/* ── Marquee track ── */}
+            <div className="port-mask">
+                <div className="port-track">
+                    {track.map((book, i) => (
                         <div
-                            key={`${book.alt}-${index}`}
+                            key={`${book.alt}-${i}`}
                             className="port-item"
-                            onMouseEnter={() => setSelectedBook(book)}
+                            onClick={() => openModal(book)}
+                            title={book.alt}
                         >
                             <Image
                                 src={book.src}
                                 alt={book.alt}
                                 width={200}
                                 height={280}
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                    display: "block",
-                                }}
+                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                             />
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Modal Overlay */}
-            {selectedBook && (
+            {/* ── Modal ── */}
+            {selected && (
                 <div
-                    className="modal-overlay"
-                    onClick={() => setSelectedBook(null)}
+                    className={`modal-backdrop${visible ? " is-open" : ""}`}
+                    onClick={closeModal}
                 >
                     <div
-                        className="modal-image-wrapper"
-                        onMouseLeave={() => setSelectedBook(null)}
+                        className={`modal-box${visible ? " is-open" : ""}`}
+                        onClick={(e) => e.stopPropagation()}
                     >
+                        <button className="modal-close" onClick={closeModal} aria-label="Close">✕</button>
                         <Image
-                            src={selectedBook.src}
-                            alt={selectedBook.alt}
+                            src={selected.src}
+                            alt={selected.alt}
                             width={400}
                             height={560}
                             priority
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "contain",
-                            }}
+                            style={{ width: "100%", height: "auto", display: "block", borderRadius: "8px" }}
                         />
+                        <p className="modal-title">{selected.alt}</p>
                     </div>
                 </div>
             )}
 
-            <style jsx>{`
-                @keyframes marquee {
-                    0% {
-                        transform: translateX(0);
-                    }
-                    100% {
-                        transform: translateX(-33.333%);
-                    }
+            <style jsx global>{`
+                @keyframes port-marquee {
+                    0%   { transform: translateX(0); }
+                    100% { transform: translateX(-33.333%); }
                 }
+            `}</style>
 
+            <style jsx>{`
                 .port-section {
                     background: #fff;
-                    font-family: "Nunito Sans", sans-serif;
-                    padding: 70px 60px;
+                    font-family: Raleway, Arial, sans-serif;
+                    padding: 70px 0;
                     position: relative;
+                    overflow: hidden;
                 }
 
                 .port-heading {
                     text-align: center;
-                    font-size: clamp(22px, 2.2vw, 32px);
+                    font-family: Oswald, Arial, sans-serif;
+                    font-size: clamp(1.5rem, 2.5vw, 2.8rem);
                     font-weight: 700;
                     color: #111;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
                     margin-bottom: 40px;
+                    padding: 0 20px;
                 }
 
-                .port-marquee-container {
+                /* Fade edges */
+                .port-mask {
                     overflow: hidden;
                     width: 100%;
-                    background: #fff;
+                    mask-image: linear-gradient(
+                        90deg, transparent 0%, black 6%, black 94%, transparent 100%
+                    );
+                    -webkit-mask-image: linear-gradient(
+                        90deg, transparent 0%, black 6%, black 94%, transparent 100%
+                    );
                 }
 
-                .port-marquee {
+                .port-track {
                     display: flex;
-                    gap: 10px;
-                    animation: marquee 40s linear infinite;
-                    width: fit-content;
-                    will-change: transform;
+                    gap: 12px;
+                    width: max-content;
+                    animation: port-marquee 40s linear infinite;
+                    padding: 16px 0 20px;
+                }
+
+                /* Pause on hover */
+                .port-track:hover {
+                    animation-play-state: paused;
                 }
 
                 .port-item {
-                    border-radius: 6px;
-                    overflow: hidden;
-                    aspect-ratio: 2/3;
-                    width: 250px;
+                    width: 200px;
                     flex-shrink: 0;
+                    aspect-ratio: 2 / 3;
+                    border-radius: 8px;
+                    overflow: hidden;
                     cursor: pointer;
-                    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
-                    transform-origin: center;
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+                    transition: transform 0.22s ease, box-shadow 0.22s ease;
+                    transform-origin: center bottom;
                 }
 
                 .port-item:hover {
-                    transform: translateY(-5px) scale(1.08);
-                    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+                    transform: translateY(-8px) scale(1.05);
+                    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
                 }
 
-                /* Modal Overlay */
-                .modal-overlay {
+                /* ── Modal backdrop ── */
+                .modal-backdrop {
                     position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: rgba(0, 0, 0, 0.6);
+                    inset: 0;
+                    background: rgba(0, 0, 0, 0);
+                    backdrop-filter: blur(0px);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    z-index: 1000;
-                    animation: fadeIn 0.3s ease-in-out;
-                    backdrop-filter: blur(3px);
+                    z-index: 9999;
+                    padding: 20px;
+                    transition: background 0.28s ease, backdrop-filter 0.28s ease;
+                }
+                .modal-backdrop.is-open {
+                    background: rgba(0, 0, 0, 0.72);
+                    backdrop-filter: blur(6px);
                 }
 
-                @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                    }
-                    to {
-                        opacity: 1;
-                    }
-                }
-
-                @keyframes zoomIn {
-                    from {
-                        transform: scale(0.8);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: scale(1);
-                        opacity: 1;
-                    }
-                }
-
-                .modal-image-wrapper {
-                    width: 400px;
-                    height: auto;
-                    border-radius: 8px;
+                /* ── Modal box ── */
+                .modal-box {
+                    position: relative;
+                    width: 100%;
+                    max-width: 340px;
+                    opacity: 0;
+                    transform: scale(0.88) translateY(16px);
+                    transition: opacity 0.28s ease, transform 0.28s ease;
+                    border-radius: 12px;
                     overflow: hidden;
-                    animation: zoomIn 0.4s ease-out;
+                    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55),
+                                0 0 0 1px rgba(245, 124, 21, 0.25);
+                }
+                .modal-box.is-open {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+
+                .modal-close {
+                    position: absolute;
+                    top: 10px; right: 10px;
+                    width: 32px; height: 32px;
+                    border-radius: 50%;
+                    background: rgba(0, 0, 0, 0.65);
+                    color: #fff;
+                    border: 1px solid rgba(255, 255, 255, 0.25);
+                    font-size: 13px;
                     cursor: pointer;
-                    will-change: transform;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 2;
+                    transition: background 0.2s;
+                    font-family: Raleway, Arial, sans-serif;
+                }
+                .modal-close:hover {
+                    background: #f57c15;
+                    border-color: transparent;
                 }
 
-                @keyframes zoomOut {
-                    from {
-                        transform: scale(1);
-                        opacity: 1;
-                    }
-                    to {
-                        transform: scale(0.8);
-                        opacity: 0;
-                    }
-                }
-
-                .modal-image-wrapper:not(:hover) {
-                    animation: zoomOut 0.4s ease-out forwards;
+                .modal-title {
+                    background: rgba(0, 0, 0, 0.82);
+                    color: #fff;
+                    text-align: center;
+                    font-size: 13px;
+                    font-weight: 600;
+                    padding: 10px 16px;
+                    margin: 0;
+                    letter-spacing: 0.3px;
                 }
 
                 @media (max-width: 640px) {
-                    .port-section { 
-                        padding: 50px 20px; 
-                    }
-                    .port-marquee-container {
-                        width: calc(100vw - 40px);
-                    }
-                    .port-item {
-                        width: 120px;
-                    }
-                    .modal-content {
-                        padding: 20px;
-                    }
+                    .port-item { width: 130px; }
+                    .modal-box { max-width: 280px; }
                 }
             `}</style>
         </section>

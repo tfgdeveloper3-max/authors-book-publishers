@@ -1,32 +1,5 @@
 import Image from "next/image";
 
-interface PlatformLogo {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-}
-
-const platformLogos: PlatformLogo[] = [
-    { src: "/images/platforms/baker-taylor.png", alt: "Baker & Taylor", width: 160, height: 40 },
-    { src: "/images/platforms/odilo.png", alt: "Odilo", width: 100, height: 36 },
-    { src: "/images/platforms/hoopla.png", alt: "Hoopla", width: 100, height: 36 },
-    { src: "/images/platforms/apple-books.png", alt: "Apple Books", width: 120, height: 36 },
-    { src: "/images/platforms/ireader.png", alt: "iReader", width: 100, height: 36 },
-    { src: "/images/platforms/barnes-noble.png", alt: "Barnes & Noble", width: 130, height: 36 },
-    { src: "/images/platforms/google-play.png", alt: "Google Play", width: 110, height: 36 },
-    { src: "/images/platforms/overdrive.png", alt: "OverDrive", width: 120, height: 36 },
-    { src: "/images/platforms/amazon.png", alt: "Amazon", width: 100, height: 36 },
-    { src: "/images/platforms/rakuten-kobo.png", alt: "Rakuten Kobo", width: 120, height: 36 },
-    { src: "/images/platforms/perlego.png", alt: "Perlego", width: 90, height: 36 },
-    { src: "/images/platforms/bookmate.png", alt: "Bookmate", width: 110, height: 36 },
-    { src: "/images/platforms/ciando.png", alt: "Ciando eBooks", width: 100, height: 36 },
-    { src: "/images/platforms/scribd.png", alt: "Scribd", width: 90, height: 36 },
-    { src: "/images/platforms/eletoltes.png", alt: "Eletoltes.hu", width: 120, height: 36 },
-    { src: "/images/platforms/tolino.png", alt: "Tolino", width: 90, height: 36 },
-    { src: "/images/platforms/bibliotheca.png", alt: "Bibliotheca", width: 120, height: 36 },
-];
-
 const MarketingSection: React.FC = () => {
     return (
         <section className="mkt-section">
@@ -69,10 +42,9 @@ const MarketingSection: React.FC = () => {
             <style jsx>{`
                 .mkt-section {
                     background: #fff;
-                    font-family: "Nunito Sans", sans-serif;
+                    font-family: Raleway, Arial, sans-serif;
                     padding: 70px 50px;
                 }
-
                 .mkt-inner {
                     display: flex;
                     align-items: center;
@@ -80,17 +52,14 @@ const MarketingSection: React.FC = () => {
                     max-width: 1300px;
                     margin: 0 auto;
                 }
-
                 .mkt-left {
                     width: 45%;
                     flex-shrink: 0;
                 }
-
                 .mkt-right {
                     flex: 1;
                     min-width: 0;
                 }
-
                 .mkt-heading {
                     font-size: clamp(22px, 2.4vw, 36px);
                     font-weight: 700;
@@ -98,25 +67,16 @@ const MarketingSection: React.FC = () => {
                     line-height: 1.25;
                     margin-bottom: 22px;
                 }
-
                 .mkt-para {
                     font-size: 14.5px;
                     color: #444;
                     line-height: 1.85;
                     margin-bottom: 18px;
                 }
-
                 @media (max-width: 820px) {
-                    .mkt-section {
-                        padding: 50px 24px;
-                    }
-                    .mkt-inner {
-                        flex-direction: column;
-                        gap: 36px;
-                    }
-                    .mkt-left {
-                        width: 100%;
-                    }
+                    .mkt-section { padding: 50px 24px; }
+                    .mkt-inner { flex-direction: column; gap: 36px; }
+                    .mkt-left { width: 100%; }
                 }
             `}</style>
         </section>

@@ -112,6 +112,7 @@ const AboutSection: React.FC = () => {
         }
         .hero-heading {
           font-size: calc(20px + (40 - 20) * (100vw - 320px) / (1920 - 320));
+          font-family: Raleway, Arial, sans-serif;
           font-weight: 600;
           color: #f57c15;
           margin-bottom: 15px;
@@ -171,6 +172,7 @@ const AboutSection: React.FC = () => {
           }
           .hero-heading {
             line-height: 1.3;
+            font-family: Raleway, Arial, sans-serif;
           }
         }
       `}</style>
