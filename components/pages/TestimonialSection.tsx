@@ -11,12 +11,12 @@ interface Testimonial {
 }
 
 const testimonials: Testimonial[] = [
-    { id: 1, name: "Rene B. Brown", avatar: "/images/Testimonials/pic-01.jpg", review: "Author's book publishing is a place that brings author personas to life. My friend suggested me of them when I was struggling to find professional editors for my book and their editors are really great and passionate about their work." },
-    { id: 2, name: "James D. Perez", avatar: "/images/Testimonials/pic-02.jpg", review: "Tired of the search for the simplest publishing methods? Author's book publishing aims to help you stand out in the publishing journey and know that your book makes it global! Thanks for serving me with a global network, ABP." },
-    { id: 3, name: "Vicki R. Baker", avatar: "/images/Testimonials/pic-03.jpg", review: "I'm glad that I was able to collaborate with author's book publishing as they have the best ghostwriting team in the USA. They served me with drafts chapter-wise every 15 days and my book was completed in literally no time." },
-    { id: 4, name: "Michael T. Hayes", avatar: "/images/Testimonials/pic-04.jpg", review: "The team at Authors Book Publishing exceeded my expectations at every turn. From editing to final distribution, they handled everything professionally. My book is now available on all major platforms." },
-    { id: 5, name: "Sarah L. Morgan", avatar: "/images/Testimonials/pic-05.jpg", review: "Working with Authors Book Publishing was an incredible experience. They understood my vision perfectly and helped bring it to life. The cover design and formatting were absolutely stunning." },
-    { id: 6, name: "David K. Wilson", avatar: "/images/Testimonials/pic-06.jpg", review: "I had struggled with self-publishing for years before finding Authors Book Publishing. Their expert team made the entire process seamless and my book reached readers worldwide within weeks." },
+    { id: 1, name: "Rene B. Brown", avatar: "/images/Testimonials/pic-01.jpg", review: "Belmont Publishing is a place that brings author personas to life. My friend suggested me of them when I was struggling to find professional editors for my book and their editors are really great and passionate about their work." },
+    { id: 2, name: "James D. Perez", avatar: "/images/Testimonials/pic-02.jpg", review: "Tired of the search for the simplest publishing methods? Belmont Publishing aims to help you stand out in the publishing journey and know that your book makes it global! Thanks for serving me with a global network, ABP." },
+    { id: 3, name: "Vicki R. Baker", avatar: "/images/Testimonials/pic-03.jpg", review: "I'm glad that I was able to collaborate with Belmont Publishing as they have the best ghostwriting team in the USA. They served me with drafts chapter-wise every 15 days and my book was completed in literally no time." },
+    { id: 4, name: "Michael T. Hayes", avatar: "/images/Testimonials/pic-04.jpg", review: "The team at Belmont Publishing exceeded my expectations at every turn. From editing to final distribution, they handled everything professionally. My book is now available on all major platforms." },
+    { id: 5, name: "Sarah L. Morgan", avatar: "/images/Testimonials/pic-05.jpg", review: "Working with Belmont Publishing was an incredible experience. They understood my vision perfectly and helped bring it to life. The cover design and formatting were absolutely stunning." },
+    { id: 6, name: "David K. Wilson", avatar: "/images/Testimonials/pic-06.jpg", review: "I had struggled with self-publishing for years before finding Belmont Publishing. Their expert team made the entire process seamless and my book reached readers worldwide within weeks." },
 ];
 
 const TestimonialsSection2: React.FC = () => {

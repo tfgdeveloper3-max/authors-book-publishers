@@ -11,7 +11,7 @@ const services: ServiceCard[] = [
         icon: "/images/icons/Book-Formatting.png",
         title: "Ideation & Brainstorming",
         description:
-            "Authors Book Publishing helps you generate story concepts, plot twists, and character arcs. Structured brainstorming sessions refine ideas, align themes, and uncover unique angles that make your book stand out before writing begins.",
+            "Belmont Publishing helps you generate story concepts, plot twists, and character arcs. Structured brainstorming sessions refine ideas, align themes, and uncover unique angles that make your book stand out before writing begins.",
     },
     {
         icon: "/images/icons/Book-Cover-Design.png",
@@ -29,7 +29,7 @@ const services: ServiceCard[] = [
         icon: "/images/icons/Book-Promotions.png",
         title: "Marketing & Promotions",
         description:
-            "From social media campaigns to PPC ads and email blasts, Authors Book Publishing positions your book in front of the right readers, building awareness, engagement, and lasting audience connections to boost sales.",
+            "From social media campaigns to PPC ads and email blasts, Belmont Publishing positions your book in front of the right readers, building awareness, engagement, and lasting audience connections to boost sales.",
     },
     {
         icon: "/images/icons/Book-vedio-tailor.png",

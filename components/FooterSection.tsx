@@ -32,12 +32,11 @@ const marketingServices: string[] = [
 const FooterSection: React.FC = () => {
     return (
         <footer className="footer">
-            {/* Background layers */}
             <div className="footer-grid" />
             <div className="footer-glow footer-glow-tl" />
             <div className="footer-glow footer-glow-br" />
 
-            {/* Main columns */}
+            {/* ── Main columns ── */}
             <div className="footer-inner">
 
                 {/* Brand + contact */}
@@ -45,10 +44,15 @@ const FooterSection: React.FC = () => {
                     <div className="footer-logo">
                         <Image
                             src="/images/logos/logo.png"
-                            alt="Authors Book Publishing"
-                            width={200}
-                            height={50}
-                            style={{ height: "44px", width: "auto" }}
+                            alt="Belmont Publishing"
+                            width={180}
+                            height={54}
+                            style={{
+                                width: "180px",
+                                height: "auto",
+                                display: "block",
+                                objectFit: "contain",
+                            }}
                         />
                     </div>
 
@@ -108,10 +112,10 @@ const FooterSection: React.FC = () => {
                 </div>
             </div>
 
-            {/* Bottom bar */}
+            {/* ── Bottom bar ── */}
             <div className="footer-bottom">
                 <p className="footer-copy">
-                    Copyright © Authors Book Publishing<br />
+                    Copyright © Belmont Publishing<br />
                     All Rights Reserved 2026
                 </p>
 
@@ -153,22 +157,19 @@ const FooterSection: React.FC = () => {
                 .footer {
                     background: #111;
                     font-family: Raleway, Arial, sans-serif;
-                    padding: 60px 60px 0;
+                    padding: 56px 60px 0;
                     position: relative;
                     overflow: hidden;
                 }
 
-                /* Grid */
                 .footer-grid {
                     position: absolute; inset: 0;
                     background-image:
-                        linear-gradient(rgba(245, 124, 21, 0.03) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(245, 124, 21, 0.03) 1px, transparent 1px);
+                        linear-gradient(rgba(245,124,21,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(245,124,21,0.03) 1px, transparent 1px);
                     background-size: 48px 48px;
                     pointer-events: none; z-index: 0;
                 }
-
-                /* Ambient glows */
                 .footer-glow {
                     position: absolute; border-radius: 50%;
                     pointer-events: none; z-index: 0;
@@ -176,36 +177,39 @@ const FooterSection: React.FC = () => {
                 .footer-glow-tl {
                     top: -80px; left: -60px;
                     width: 380px; height: 380px;
-                    background: radial-gradient(circle, rgba(245, 124, 21, 0.10) 0%, transparent 65%);
+                    background: radial-gradient(circle, rgba(245,124,21,0.10) 0%, transparent 65%);
                 }
                 .footer-glow-br {
                     bottom: -60px; right: -40px;
                     width: 300px; height: 300px;
-                    background: radial-gradient(circle, rgba(245, 124, 21, 0.07) 0%, transparent 65%);
+                    background: radial-gradient(circle, rgba(245,124,21,0.07) 0%, transparent 65%);
                 }
 
-                /* Inner columns */
+                /* ── Columns row ── */
                 .footer-inner {
                     position: relative; z-index: 2;
                     display: flex;
+                    align-items: flex-start;       /* all cols start at top */
                     gap: 40px;
                     max-width: 1300px;
                     margin: 0 auto;
-                    padding-bottom: 50px;
-                    border-bottom: 1px solid rgba(245, 124, 21, 0.12);
-                    flex-wrap: wrap;
+                    padding-bottom: 48px;
+                    border-bottom: 1px solid rgba(245,124,21,0.12);
+                    flex-wrap: nowrap;             /* keep on one row on desktop */
                 }
 
-                /* Brand column */
+                /* Brand column — fixed width, no shrink */
                 .footer-brand {
-                    width: 220px;
-                    flex-shrink: 0;
+                    flex: 0 0 220px;
                     display: flex;
                     flex-direction: column;
-                    gap: 22px;
+                    gap: 20px;
                 }
 
-                /* Contact items with icon boxes */
+                .footer-logo {
+                    line-height: 0;               /* removes phantom whitespace below img */
+                }
+
                 .footer-contact {
                     display: flex;
                     flex-direction: column;
@@ -216,34 +220,33 @@ const FooterSection: React.FC = () => {
                     align-items: flex-start;
                     gap: 10px;
                     font-size: 12.5px;
-                    color: rgba(255, 255, 255, 0.58);
+                    color: rgba(255,255,255,0.58);
                     line-height: 1.65;
                 }
                 .contact-icon {
                     width: 28px; height: 28px;
                     border-radius: 7px; flex-shrink: 0;
-                    background: rgba(245, 124, 21, 0.10);
-                    border: 1px solid rgba(245, 124, 21, 0.20);
+                    background: rgba(245,124,21,0.10);
+                    border: 1px solid rgba(245,124,21,0.20);
                     display: flex; align-items: center; justify-content: center;
                     font-size: 12px; color: #f57c15;
                     margin-top: 1px;
                 }
 
-                /* Service columns */
+                /* Service columns — equal flex */
                 .footer-col {
                     flex: 1;
-                    min-width: 160px;
+                    min-width: 0;
                 }
                 .footer-col-title {
-                    font-size: 14px;
+                    font-size: 13px;
                     font-weight: 700;
                     color: #fff;
-                    margin-bottom: 18px;
+                    margin: 0 0 16px;
                     letter-spacing: 0.3px;
                     position: relative;
                     padding-bottom: 10px;
                 }
-                /* Orange underline accent on column titles */
                 .footer-col-title::after {
                     content: '';
                     position: absolute;
@@ -257,7 +260,7 @@ const FooterSection: React.FC = () => {
                     margin: 0; padding: 0;
                     display: flex;
                     flex-direction: column;
-                    gap: 10px;
+                    gap: 8px;
                 }
                 .footer-col li {
                     display: flex;
@@ -270,60 +273,51 @@ const FooterSection: React.FC = () => {
                     flex-shrink: 0;
                 }
                 .footer-col :global(a) {
-                    font-size: 13px;
-                    color: rgba(255, 255, 255, 0.58);
+                    font-size: 12.5px;
+                    color: rgba(255,255,255,0.55);
                     text-decoration: none;
                     transition: color 0.2s;
                     letter-spacing: 0.2px;
+                    white-space: nowrap;
                 }
-                .footer-col :global(a:hover) {
-                    color: #f57c15;
-                }
+                .footer-col :global(a:hover) { color: #f57c15; }
 
-                /* Bottom bar */
+                /* ── Bottom bar ── */
                 .footer-bottom {
                     position: relative; z-index: 2;
                     max-width: 1300px;
                     margin: 0 auto;
-                    padding: 22px 0;
+                    padding: 20px 0;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     flex-wrap: wrap;
-                    gap: 16px;
+                    gap: 14px;
                 }
                 .footer-copy {
                     font-size: 12px;
-                    color: rgba(255, 255, 255, 0.38);
+                    color: rgba(255,255,255,0.38);
                     line-height: 1.6;
                     margin: 0;
                 }
-
-                /* Social icons */
-                .footer-social {
-                    display: flex;
-                    gap: 8px;
-                }
+                .footer-social { display: flex; gap: 8px; }
                 .footer-social :global(.social-icon) {
                     width: 36px; height: 36px;
                     border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.06);
-                    border: 1px solid rgba(245, 124, 21, 0.18);
+                    background: rgba(255,255,255,0.06);
+                    border: 1px solid rgba(245,124,21,0.18);
                     display: flex; align-items: center; justify-content: center;
-                    color: rgba(255, 255, 255, 0.60);
+                    color: rgba(255,255,255,0.60);
                     text-decoration: none;
-                    transition: background 0.2s, color 0.2s,
-                                box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+                    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s, border-color 0.2s;
                 }
                 .footer-social :global(.social-icon:hover) {
                     background: #f57c15;
                     color: #fff;
                     border-color: transparent;
-                    box-shadow: 0 4px 18px rgba(245, 124, 21, 0.42);
+                    box-shadow: 0 4px 18px rgba(245,124,21,0.42);
                     transform: translateY(-3px);
                 }
-
-                /* Policy links */
                 .footer-links {
                     display: flex;
                     align-items: center;
@@ -331,24 +325,65 @@ const FooterSection: React.FC = () => {
                 }
                 .footer-links :global(a) {
                     font-size: 12.5px;
-                    color: rgba(255, 255, 255, 0.45);
+                    color: rgba(255,255,255,0.45);
                     text-decoration: none;
                     transition: color 0.2s;
                 }
-                .footer-links :global(a:hover) {
-                    color: #f57c15;
-                }
+                .footer-links :global(a:hover) { color: #f57c15; }
                 .links-divider {
                     width: 1px; height: 14px;
-                    background: rgba(255, 255, 255, 0.14);
+                    background: rgba(255,255,255,0.14);
                     display: inline-block;
                     flex-shrink: 0;
                 }
 
+                /* ── Tablet (≤1024px) ── */
+                @media (max-width: 1024px) {
+                    .footer { padding: 48px 32px 0; }
+                    .footer-inner { gap: 28px; }
+                    .footer-brand { flex: 0 0 190px; }
+                    .footer-col :global(a) { white-space: normal; }
+                }
+
+                /* ── Mobile (≤768px) ── */
                 @media (max-width: 768px) {
-                    .footer { padding: 50px 20px 0; }
-                    .footer-brand { width: 100%; }
-                    .footer-bottom { flex-direction: column; align-items: flex-start; }
+                    .footer { padding: 44px 20px 0; }
+
+                    .footer-inner {
+                        flex-wrap: wrap;       /* stack on mobile */
+                        gap: 32px;
+                    }
+
+                    /* Full width brand on mobile */
+                    .footer-brand {
+                        flex: 0 0 100%;
+                        width: 100%;
+                    }
+
+                    /* 2 columns for service lists */
+                    .footer-col {
+                        flex: 0 0 calc(50% - 16px);
+                        min-width: 0;
+                    }
+
+                    .footer-bottom {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 16px;
+                    }
+                }
+
+                /* ── Small mobile (≤480px) ── */
+                @media (max-width: 480px) {
+                    /* 1 column for service lists */
+                    .footer-col {
+                        flex: 0 0 100%;
+                    }
+                    .footer-bottom {
+                        align-items: center;
+                        text-align: center;
+                    }
+                    .footer-copy { text-align: center; width: 100%; }
                 }
             `}</style>
         </footer>

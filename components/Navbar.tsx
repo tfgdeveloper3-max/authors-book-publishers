@@ -35,10 +35,10 @@ const Navbar: React.FC = () => {
                 <Link href="/" className="nav-logo">
                     <Image
                         src="/images/logos/logo.png"
-                        alt="Authors Book Publishing"
-                        width={220}
-                        height={55}
-                        style={{ height: "40px", width: "auto" }}
+                        alt="Belmont Publishing"
+                        width={570}
+                        height={200}
+                        style={{ height: "150px", width: "300px" }}
                     />
                 </Link>
 

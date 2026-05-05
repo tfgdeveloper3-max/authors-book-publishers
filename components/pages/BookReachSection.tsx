@@ -50,7 +50,7 @@ const BookReachSection: React.FC = () => {
 
                     <p className="reach-para">
                         Most e-books stall on a single platform, leaving half the market
-                        untapped and authors wondering why sales drop. With Authors Book
+                        untapped and authors wondering why sales drop. With Belmont
                         Publishing, your title isn&apos;t boxed into one store. We position
                         your book where overlooked readers actually exist, like Kobo for
                         international commuters, Apple Books for loyal iOS users, and
@@ -59,7 +59,7 @@ const BookReachSection: React.FC = () => {
                         niches competitors don&apos;t even know exist.
                     </p>
                     <p className="reach-para">
-                        At Authors Book Publishing, we handle those differences for you, thus
+                        At Belmont Publishing, we handle those differences for you, thus
                         making sure your e-book never gets sidelined or lost in the shuffle.
                         The result is broader discoverability, multiple revenue streams, and a
                         book built to navigate the complex digital landscape all while catching

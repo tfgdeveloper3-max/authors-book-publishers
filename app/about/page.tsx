@@ -32,7 +32,7 @@ export default function AboutPage() {
                         <span className="badge">Who We Are</span>
                         <h2 className="hdg white">We Are More Than A Publishing Company</h2>
                         <div className="odiv" />
-                        <p className="para muted">Authors Book Publishing is a full-service book publishing company based in New York, dedicated to helping authors bring their stories to life. We offer end-to-end solutions — from ghostwriting and manuscript editing to cover design, formatting, global distribution, and marketing campaigns.</p>
+                        <p className="para muted">Belmont Publishing is a full-service book publishing company based in New York, dedicated to helping authors bring their stories to life. We offer end-to-end solutions — from ghostwriting and manuscript editing to cover design, formatting, global distribution, and marketing campaigns.</p>
                         <p className="para muted">Our team of experienced editors, designers, and publishing specialists work closely with every author to ensure their vision is perfectly executed. We believe every story deserves to be told, and every author deserves a partner who truly cares about their success.</p>
                         <div className="stats-row">
                             {[["500+", "Books Published"], ["98%", "Happy Authors"], ["50+", "Countries"]].map(([n, l], i) => (
@@ -86,7 +86,7 @@ export default function AboutPage() {
                     </div>
                     <div className="col-text">
                         <span className="badge">Why Choose Us</span>
-                        <h2 className="hdg white">The Authors Book Publishing Difference</h2>
+                        <h2 className="hdg white">The Belmont Publishing Difference</h2>
                         <div className="odiv" />
                         {[
                             { t: "End-to-End Service", d: "From first draft to final distribution — everything under one roof so you never juggle multiple vendors." },

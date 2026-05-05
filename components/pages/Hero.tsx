@@ -41,7 +41,7 @@ const HeroSection: React.FC = () => {
                     <p className="hero-desc">
                         Your book isn&apos;t about the number of pages or total word count;
                         it&apos;s about the power of storytelling and how much it inspires
-                        readers. And that&apos;s where Authors Book Publishing comes into
+                        readers. And that&apos;s where Belmont Publishing comes into
                         action. We transform your manuscript into a well-written,
                         publish-ready copy and launch it globally via e-book platforms. That
                         means it will be ready to hit bookstores, be acknowledged by

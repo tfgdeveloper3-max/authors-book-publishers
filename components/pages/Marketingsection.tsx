@@ -22,7 +22,7 @@ const MarketingSection: React.FC = () => {
 
                     <p className="mkt-para">
                         From print-ready manuscripts to online storefronts, our packages cover
-                        formatting, cover design, proofreading, and conversion. Authors Book
+                        formatting, cover design, proofreading, and conversion. Belmont
                         Publishing makes sure your work shines on Amazon, Barnes &amp; Noble,
                         Kobo, and more while staying true to your creative vision and budget.
                     </p>

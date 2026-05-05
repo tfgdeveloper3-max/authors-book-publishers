@@ -65,7 +65,7 @@ const GiveStorySection: React.FC = () => {
 
                     <h2 className="give-heading">
                         Top Online Book Publishers In{" "}
-                        <span className="hl">USA</span>, And Professional Authors Book
+                        <span className="hl">USA</span>, And Professional Belmont
                         Publishing Services, In One Place!
                     </h2>
 

@@ -76,7 +76,7 @@ const CTASection: React.FC = () => {
                     </h3>
 
                     <p className="cta-desc">
-                        Authors Book Publishing helps you share stories that matter, so
+                        Belmont Publishing helps you share stories that matter, so
                         people feel your message, understand your heart, and remember your
                         words long after they finish reading.
                     </p>

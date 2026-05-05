@@ -26,7 +26,7 @@ const AboutSection: React.FC = () => {
         </h2>
 
         <p className="hero-para">
-          At Authors Book Publishing, we don&apos;t just look at your manuscript
+          At Belmont Publishing, we don&apos;t just look at your manuscript
           like it&apos;s a bunch of words on a screen, we see the heart behind
           it, the effort it took to get even one chapter finished, and that&apos;s
           why we walk with you through everything, from making edits that feel

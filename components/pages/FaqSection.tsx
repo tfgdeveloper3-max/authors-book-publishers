@@ -35,9 +35,9 @@ const faqs: FAQItem[] = [
     },
     {
         id: 5,
-        question: "Why should I choose Authors Book Publishing?",
+        question: "Why should I choose Belmont Publishing?",
         answer:
-            "Authors Book Publishing offers end-to-end publishing solutions under one roof. With over 1,200 published titles, awards-winning editors, and a global distribution network spanning 400+ stores in 100+ countries, we provide unmatched expertise, transparency, and dedication to every author's journey.",
+            "Belmont Publishing offers end-to-end publishing solutions under one roof. With over 1,200 published titles, awards-winning editors, and a global distribution network spanning 400+ stores in 100+ countries, we provide unmatched expertise, transparency, and dedication to every author's journey.",
     },
 ];
 
