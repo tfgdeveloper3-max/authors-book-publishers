@@ -3,19 +3,66 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
-const serviceLinks = [
-    { href: "/services/ghostwriting", label: "Ghostwriting" },
-    { href: "/services/editing", label: "Book Editing" },
-    { href: "/services/cover-design", label: "Cover Design" },
-    { href: "/services/publishing", label: "Publishing" },
-    { href: "/services/marketing", label: "Book Marketing" },
+// ── Services mega-menu data ───────────────────────────────────────────────────
+const servicesMenu = [
+    {
+        label: "Writing Services",
+        links: [
+            "Book Writing",
+            "Ghostwriting",
+            "Children's Book Writing",
+            "Sci-Fi Writing",
+            "Memoir Writing",
+            "Fiction Writing",
+            "SEO Content Writing",
+            "Mystery Writing",
+            "Historical Writing",
+            "Fantasy Writing",
+            "Non-Fiction Writing",
+            "Script Writing",
+            "Horror Writing",
+        ],
+    },
+    {
+        label: "Editing & Publishing",
+        links: [
+            "Book Proofreading",
+            "Book Editing",
+            "Ebook Creation",
+            "Audiobook Narration",
+            "Book Formatting",
+            "Children's Book Editing",
+            "Book Publishing",
+        ],
+    },
+    {
+        label: "Design, Printing & Marketing",
+        links: [
+            "Book Cover Design",
+            "Author Website Design",
+            "Book Printing",
+            "Book Marketing",
+        ],
+    },
 ];
+
+// Slugify function to convert names like "Book Writing" to "book-writing"
+const slugify = (str: string) =>
+    str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
 const Navbar: React.FC = () => {
     const [servicesOpen, setServicesOpen] = useState<boolean>(false);
+    const [activeService, setActiveService] = useState<string>(servicesMenu[0].label);
     const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+    const [mobileServicesOpen, setMobileServicesOpen] = useState<boolean>(false);
+    const [mobileSubOpen, setMobileSubOpen] = useState<string | null>(null);
+
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const activeLinks = servicesMenu.find((s) => s.label === activeService)?.links ?? [];
 
     /* ── Dropdown: delayed close so gap between trigger & menu doesn't close it ── */
     const handleMouseEnter = () => {
@@ -44,38 +91,55 @@ const Navbar: React.FC = () => {
 
                 <ul className="nav-links">
                     <li><Link href="/">HOME</Link></li>
-                    <li><Link href="/about">ABOUT</Link></li>
+                    <li><Link href="/about" >ABOUT</Link></li>
                     <li><Link href="/portfolio">PORTFOLIO</Link></li>
-                    <li><Link href="/testimonials">TESTIMONIALS</Link></li>
+                    <li><Link href="/Blogs">BLOGS</Link></li>
 
-                    {/* ── Services dropdown ── */}
+                    {/* ── Services mega dropdown ── */}
                     <li
                         className="nav-dropdown"
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                     >
-                        {/* Clicking "SERVICES" goes to /services page */}
                         <Link href="/services" className="nav-services-trigger">
-                            SERVICES <span className="caret">&#9660;</span>
+                            SERVICES <ChevronDown size={12} className={`caret-icon ${servicesOpen ? "rotate-180" : ""}`} />
                         </Link>
 
-                        {/* Dropdown stays open as long as mouse is over trigger OR menu */}
-                        <ul
-                            className={`dropdown-menu${servicesOpen ? " open" : ""}`}
+                        {/* Mega Dropdown Menu */}
+                        <div
+                            className={`dropdown-mega-menu${servicesOpen ? " open" : ""}`}
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                         >
-                            {serviceLinks.map((s) => (
-                                <li key={s.href}>
-                                    <Link
-                                        href={s.href}
-                                        onClick={() => setServicesOpen(false)}
+                            <div className="mega-left">
+                                {servicesMenu.map((srv) => (
+                                    <button
+                                        key={srv.label}
+                                        className={`mega-cat-btn ${activeService === srv.label ? "active" : ""}`}
+                                        onMouseEnter={() => setActiveService(srv.label)}
                                     >
-                                        {s.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                                        {srv.label}
+                                        <ChevronRight size={13} className="opacity-50 shrink-0" />
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="mega-right">
+                                <p className="mega-heading">{activeService}</p>
+                                <ul className="mega-links-grid">
+                                    {activeLinks.map((link) => (
+                                        <li key={link}>
+                                            <Link
+                                                href={`/InnerServices/${slugify(link)}`}
+                                                onClick={() => setServicesOpen(false)}
+                                            >
+                                                {link}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
                     </li>
 
                     <li className="nav-cta-li">
@@ -94,23 +158,81 @@ const Navbar: React.FC = () => {
                 </button>
             </div>
 
-            {mobileOpen && (
-                <ul className="mobile-menu">
-                    <li><Link href="/" onClick={() => setMobileOpen(false)}>HOME</Link></li>
-                    <li><Link href="/about" onClick={() => setMobileOpen(false)}>ABOUT</Link></li>
-                    <li><Link href="/portfolio" onClick={() => setMobileOpen(false)}>PORTFOLIO</Link></li>
-                    <li><Link href="/testimonials" onClick={() => setMobileOpen(false)}>TESTIMONIALS</Link></li>
-                    <li><Link href="/services" onClick={() => setMobileOpen(false)}>SERVICES</Link></li>
-                    {serviceLinks.map((s) => (
-                        <li key={s.href} className="mobile-sub">
-                            <Link href={s.href} onClick={() => setMobileOpen(false)}>
-                                {s.label}
-                            </Link>
+            {/* ── Mobile Menu ── */}
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.ul
+                        className="mobile-menu"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <li><Link href="/" onClick={() => setMobileOpen(false)}>HOME</Link></li>
+                        <li><Link href="/about" onClick={() => setMobileOpen(false)}>ABOUT</Link></li>
+                        <li><Link href="/portfolio" onClick={() => setMobileOpen(false)}>PORTFOLIO</Link></li>
+                        <li><Link href="/Blogs" onClick={() => setMobileOpen(false)}>BLOGS</Link></li>
+
+                        {/* Mobile Services Accordion */}
+                        <li>
+                            <div className="mobile-service-toggle">
+                                <Link href="/services" onClick={() => setMobileOpen(false)}>
+                                    SERVICES
+                                </Link>
+                                <button onClick={() => setMobileServicesOpen(!mobileServicesOpen)}>
+                                    <ChevronDown size={14} className={`transition-transform ${mobileServicesOpen ? "rotate-180" : ""}`} />
+                                </button>
+                            </div>
+
+                            <AnimatePresence>
+                                {mobileServicesOpen && (
+                                    <motion.ul
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="mobile-sub-menu"
+                                    >
+                                        {servicesMenu.map((srv) => (
+                                            <li key={srv.label}>
+                                                <button
+                                                    className="mobile-cat-btn"
+                                                    onClick={() => setMobileSubOpen(mobileSubOpen === srv.label ? null : srv.label)}
+                                                >
+                                                    {srv.label}
+                                                    <ChevronDown size={12} className={`transition-transform ${mobileSubOpen === srv.label ? "rotate-180" : ""}`} />
+                                                </button>
+                                                <AnimatePresence>
+                                                    {mobileSubOpen === srv.label && (
+                                                        <motion.ul
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: "auto" }}
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            className="mobile-inner-links"
+                                                        >
+                                                            {srv.links.map((link) => (
+                                                                <li key={link}>
+                                                                    <Link
+                                                                        href={`/InnerServices/${slugify(link)}`}
+                                                                        onClick={() => setMobileOpen(false)}
+                                                                    >
+                                                                        {link}
+                                                                    </Link>
+                                                                </li>
+                                                            ))}
+                                                        </motion.ul>
+                                                    )}
+                                                </AnimatePresence>
+                                            </li>
+                                        ))}
+                                    </motion.ul>
+                                )}
+                            </AnimatePresence>
                         </li>
-                    ))}
-                    <li><Link href="/contact" onClick={() => setMobileOpen(false)}>CONTACT US</Link></li>
-                </ul>
-            )}
+
+                        <li><Link href="/contact" onClick={() => setMobileOpen(false)}>CONTACT US</Link></li>
+                    </motion.ul>
+                )}
+            </AnimatePresence>
 
             <style jsx>{`
                 .navbar {
@@ -126,6 +248,7 @@ const Navbar: React.FC = () => {
                     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4),
                                 0 1px 0 rgba(245, 124, 21, 0.08);
                     font-family: Raleway, Arial, sans-serif;
+                    overflow: visible;
                 }
 
                 .nav-glow-line {
@@ -133,9 +256,7 @@ const Navbar: React.FC = () => {
                     bottom: -1px; left: 50%;
                     transform: translateX(-50%);
                     width: 420px; height: 2px;
-                    background: linear-gradient(
-                        90deg, transparent, rgba(245, 124, 21, 0.55), transparent
-                    );
+                    background: linear-gradient(90deg, transparent, rgba(245, 124, 21, 0.55), transparent);
                     pointer-events: none;
                     z-index: 1;
                 }
@@ -189,7 +310,7 @@ const Navbar: React.FC = () => {
                     background: rgba(245, 124, 21, 0.08);
                 }
 
-                /* Services trigger — now a real Link */
+                /* Services trigger */
                 :global(.nav-services-trigger) {
                     color: rgba(255, 255, 255, 0.75) !important;
                     font-size: 12px !important;
@@ -210,10 +331,8 @@ const Navbar: React.FC = () => {
                     background: rgba(245, 124, 21, 0.08) !important;
                 }
 
-                .caret {
-                    font-size: 7px;
-                    opacity: 0.7;
-                    transition: transform 0.2s;
+                .caret-icon {
+                    transition: transform 0.3s ease;
                 }
 
                 .nav-dropdown { position: relative; cursor: pointer; }
@@ -229,42 +348,42 @@ const Navbar: React.FC = () => {
                     letter-spacing: 0.7px !important;
                 }
                 .nav-cta-li :global(.nav-cta-link:hover) {
-                    background: #d96a0a !important;
+                    color: #d96a0a !important;
+                    background: #fff !important;
                     box-shadow: 0 6px 24px rgba(245, 124, 21, 0.52) !important;
                 }
 
-                /* ── Dropdown menu ── */
-                .dropdown-menu {
+                /* ── Mega Dropdown menu ── */
+                .dropdown-mega-menu {
                     position: absolute;
                     top: calc(100% + 8px);
-                    left: 50%;
-                    transform: translateX(-50%) translateY(-6px);
+                    right: 0; /* Aligned to right so it doesn't overflow screen */
+                    transform: translateY(-6px);
                     background: rgba(18, 18, 18, 0.97);
                     backdrop-filter: blur(16px);
                     -webkit-backdrop-filter: blur(16px);
                     border: 1px solid rgba(245, 124, 21, 0.18);
                     border-radius: 10px;
-                    list-style: none;
-                    min-width: 190px;
-                    padding: 6px;
-                    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55),
-                                0 0 24px rgba(245, 124, 21, 0.06);
+                    width: 640px;
+                    display: flex;
+                    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 24px rgba(245, 124, 21, 0.06);
                     z-index: 999;
                     margin: 0;
                     pointer-events: none;
                     opacity: 0;
                     visibility: hidden;
                     transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+                    overflow: hidden;
                 }
-                .dropdown-menu.open {
+                .dropdown-mega-menu.open {
                     opacity: 1;
                     visibility: visible;
                     pointer-events: all;
-                    transform: translateX(-50%) translateY(0);
+                    transform: translateY(0);
                 }
 
                 /* Bridge gap so mouse moving from trigger to menu doesn't close it */
-                .dropdown-menu::before {
+                .dropdown-mega-menu::before {
                     content: '';
                     position: absolute;
                     top: -10px;
@@ -272,21 +391,72 @@ const Navbar: React.FC = () => {
                     height: 10px;
                 }
 
-                .dropdown-menu li :global(a) {
+                .mega-left {
+                    width: 240px;
+                    flex-shrink: 0;
+                    padding: 12px 0;
+                    border-right: 1px solid rgba(245, 124, 21, 0.12);
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .mega-cat-btn {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 10px 16px;
+                    background: transparent;
+                    border: none;
+                    color: rgba(255, 255, 255, 0.7);
+                    font-size: 12px;
+                    font-weight: 600;
+                    font-family: Raleway, Arial, sans-serif;
+                    cursor: pointer;
+                    transition: background 0.15s, color 0.15s;
+                    text-align: left;
+                }
+                .mega-cat-btn:hover, .mega-cat-btn.active {
+                    background: rgba(245, 124, 21, 0.12);
+                    color: #f57c15;
+                }
+
+                .mega-right {
+                    flex: 1;
+                    padding: 16px;
+                }
+
+                .mega-heading {
+                    font-size: 10px;
+                    font-weight: 800;
+                    letter-spacing: 1.5px;
+                    color: #f57c15;
+                    text-transform: uppercase;
+                    margin: 0 0 12px 0;
+                    font-family: Raleway, Arial, sans-serif;
+                }
+
+                .mega-links-grid {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 2px 12px;
+                }
+                .mega-links-grid li :global(a) {
                     display: block !important;
-                    padding: 9px 14px !important;
+                    padding: 6px 8px !important;
                     font-size: 12px !important;
-                    font-weight: 600 !important;
-                    color: rgba(255, 255, 255, 0.70) !important;
-                    border-radius: 6px !important;
-                    letter-spacing: 0.3px;
+                    font-weight: 500 !important;
+                    color: rgba(255, 255, 255, 0.65) !important;
+                    border-radius: 4px !important;
                     background: transparent !important;
                     transition: background 0.15s, color 0.15s !important;
                     white-space: nowrap;
-                    justify-content: flex-start !important;
                 }
-                .dropdown-menu li :global(a:hover) {
-                    background: rgba(245, 124, 21, 0.12) !important;
+                .mega-links-grid li :global(a:hover) {
+                    background: rgba(245, 124, 21, 0.1) !important;
                     color: #f57c15 !important;
                 }
 
@@ -320,6 +490,7 @@ const Navbar: React.FC = () => {
                     background: rgba(14, 14, 14, 0.97);
                     backdrop-filter: blur(16px);
                     border-top: 1px solid rgba(245, 124, 21, 0.12);
+                    overflow: hidden;
                 }
                 .mobile-menu li :global(a) {
                     display: block;
@@ -337,17 +508,79 @@ const Navbar: React.FC = () => {
                     background: rgba(245, 124, 21, 0.07);
                     border-left-color: #f57c15;
                 }
-                /* Sub-links indented on mobile */
-                .mobile-sub :global(a) {
-                    padding-left: 40px !important;
-                    font-size: 11px !important;
-                    color: rgba(255, 255, 255, 0.50) !important;
-                    font-weight: 600 !important;
-                    border-left-color: transparent !important;
+
+                /* Mobile Services Toggle */
+                .mobile-service-toggle {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0 24px 0 0;
+                    border-left: 2px solid transparent;
                 }
-                .mobile-sub :global(a:hover) {
+                .mobile-service-toggle:hover {
+                    border-left-color: #f57c15;
+                    background: rgba(245, 124, 21, 0.07);
+                }
+                .mobile-service-toggle :global(a) {
+                    flex: 1;
+                }
+                .mobile-service-toggle button {
+                    background: none;
+                    border: none;
+                    color: rgba(255, 255, 255, 0.4);
+                    cursor: pointer;
+                    padding: 12px 8px;
+                    transition: color 0.2s;
+                }
+                .mobile-service-toggle button:hover {
+                    color: #f57c15;
+                }
+
+                /* Mobile Sub Menu (Categories) */
+                .mobile-sub-menu {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                    background: rgba(0, 0, 0, 0.2);
+                }
+                .mobile-cat-btn {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 10px 24px;
+                    background: transparent;
+                    border: none;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                    color: rgba(255, 255, 255, 0.6);
+                    font-size: 12px;
+                    font-weight: 700;
+                    font-family: Raleway, Arial, sans-serif;
+                    cursor: pointer;
+                    text-align: left;
+                    transition: color 0.2s;
+                }
+                .mobile-cat-btn:hover {
+                    color: #f57c15;
+                }
+
+                /* Mobile Inner Links (Sub-categories links) */
+                .mobile-inner-links {
+                    list-style: none;
+                    margin: 0;
+                    padding: 4px 0;
+                    background: rgba(0, 0, 0, 0.15);
+                    overflow: hidden;
+                }
+                .mobile-inner-links li :global(a) {
+                    padding-left: 36px !important;
+                    font-size: 11px !important;
+                    color: rgba(255, 255, 255, 0.45) !important;
+                    font-weight: 600 !important;
+                }
+                .mobile-inner-links li :global(a:hover) {
                     color: #f57c15 !important;
-                    border-left-color: #f57c15 !important;
                 }
 
                 @media (max-width: 768px) {

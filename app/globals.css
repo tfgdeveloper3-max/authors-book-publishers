@@ -12,6 +12,12 @@
 
 body {
   font-family: Raleway, Arial, sans-serif;
+  margin: 0;
+  /* ✅ FIX: Browser ka default white margin hatane ke liye */
+  padding: 0;
+  /* ✅ FIX: Kisi bhi default padding ko rokne ke liye */
+  overflow-x: hidden;
+  /* ✅ FIX: Horizontal scroll aur white corners ko rokne ke liye */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -23,7 +29,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Raleway, Arial, sans-serif;
+  font-family: Oswald, Arial, sans-serif;
+  /* ✅ FIX: Yahan Raleway tha, Oswald kar diya jaise comment mein likha tha */
   font-weight: 700;
   word-break: keep-all;
   overflow-wrap: normal;

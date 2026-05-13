@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.css";
+import CustomCursor from "@/components/ui/CustomCursor";
+import GlobalAnimations from "@/components/ui/GlobalAnimations";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -28,6 +30,8 @@ export default function RootLayout({
         className="min-h-full flex flex-col"
         style={{ fontFamily: "Raleway, Arial, sans-serif" }}
       >
+        <CustomCursor />
+        <GlobalAnimations />
         {children}
       </body>
     </html>

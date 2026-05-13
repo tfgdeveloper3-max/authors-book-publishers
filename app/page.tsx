@@ -1,44 +1,62 @@
 "use client";
-import { useState } from "react";
-import AboutSection from "@/components/pages/AboutSection";
+
+import { useEffect } from "react";
+import { useSmoothScroll } from "@/hooks/useSmoothScroll";
+import { registerGSAP } from "@/lib/gsapSetup";
+import { gsap } from "gsap";
+
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/pages/Hero";
 import LogosBar from "@/components/Logobar";
-import MarketingSection from "@/components/pages/Marketingsection";
-import CTASection from "@/components/pages/Ctasection";
-import ConsultantsSection from "@/components/pages/ConsultantSection";
+import AboutSection from "@/components/pages/AboutSection";
 import BookReachSection from "@/components/pages/BookReachSection";
-import ProcedureSection from "@/components/pages/ProcedureSection";
 import BrandSection from "@/components/pages/BrandSection";
-import DiscountBannerSection from "@/components/pages/DiscountBannerSection";
+import ConsultantsSection from "@/components/pages/ConsultantSection";
 import GiveStorySection from "@/components/pages/GiveStorySection";
+import CTASection from "@/components/pages/Ctasection";
+import DiscountBannerSection from "@/components/pages/DiscountBannerSection";
 import PortfolioSection from "@/components/pages/PortfolioSection";
+import ProcedureSection from "@/components/pages/ProcedureSection";
+import MarketingSection from "@/components/pages/Marketingsection";
 import TestimonialsSection2 from "@/components/pages/TestimonialSection";
 import ContactFormSection from "@/components/pages/ContactFormSection";
 import FAQSection from "@/components/pages/FaqSection";
 import FooterSection from "@/components/FooterSection";
 
-export default function Home() {
+export default function HomePage() {
+  useSmoothScroll();
+
+  useEffect(() => {
+    registerGSAP();
+
+    gsap.fromTo(
+      ".page-content",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.1 }
+    );
+  }, []);
+
   return (
     <>
-      <Navbar />
-      <HeroSection />
-      <LogosBar />
-      <AboutSection />
-      <CTASection />
-      <MarketingSection />
-      <BookReachSection />
-      <ConsultantsSection />
-      <ProcedureSection />
-      <BrandSection />
-      <DiscountBannerSection />
-      <GiveStorySection />
-      <PortfolioSection />
-      <TestimonialsSection2 />
-      <ContactFormSection />
-      <FAQSection />
-      <FooterSection />
+      <div className="page-content">
+        <Navbar />
+        <HeroSection />
+        <LogosBar />
+        <AboutSection />
+        <BookReachSection />
+        <BrandSection />
+        <ConsultantsSection />
+        <GiveStorySection />
+        <CTASection />
+        <DiscountBannerSection />
+        <PortfolioSection />
+        <ProcedureSection />
+        <MarketingSection />
+        <TestimonialsSection2 />
+        <ContactFormSection />
+        <FAQSection />
+        <FooterSection />
+      </div>
     </>
   );
 }
-
