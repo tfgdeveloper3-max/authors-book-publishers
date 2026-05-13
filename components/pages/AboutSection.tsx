@@ -66,7 +66,7 @@ const AboutSection: React.FC = () => {
           gap: 60px;
           padding: 60px 60px 60px 40px;
           background: #f5f5f0;
-          max-width: 1400px;
+          width: 100%;
           margin: 0 auto;
           font-family: Raleway, Arial, sans-serif;
         }
